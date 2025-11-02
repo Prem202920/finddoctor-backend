@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 
 // route imports
 import testRoutes from "./routes/test.js";
-import doctorsRoutes from "./routes/doctors.js"; // only this one
+import doctorsRoutes from "./routes/doctors.js";
 import usersRoutes from "./routes/users.js";
 import appointmentsRoutes from "./routes/appointments.js";
 
@@ -29,9 +29,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ----- Routes -----
-app.use("/api", testRoutes);                
-app.use("/api/doctors", doctorsRoutes);     
-app.use("/api/users", usersRoutes);         
+app.use("/api", testRoutes);
+app.use("/api/doctors", doctorsRoutes);
+app.use("/api/users", usersRoutes);
 app.use("/api/appointments", appointmentsRoutes);
 
 // root route
@@ -58,11 +58,12 @@ const startServer = async () => {
   }
 
   try {
-    await mongoose.connect(mongoUri, {
+    const conn = await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
-    console.log("✅ Connected to MongoDB");
+    // Log host and database name so we can confirm which DB we're connected to
+    console.log(`✅ Connected to MongoDB: ${conn.connection.host}/${conn.connection.name}`);
     app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
   } catch (err) {
     console.error("❌ MongoDB connection error:", err.message);
